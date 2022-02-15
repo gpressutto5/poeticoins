@@ -10,7 +10,7 @@ defmodule PoeticoinsWeb.CryptoDashboardLive do
       |> Enum.map(& {&1.product, &1})
       |> Enum.into(%{})
 
-    if socket.connected? do
+    if connected?(socket) do
       Enum.each(products, &Poeticoins.subscribe_to_trades(&1))
     end
 
