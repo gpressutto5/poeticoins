@@ -7,7 +7,7 @@ defmodule Poeticoins.MixProject do
       version: "0.1.0",
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
-      compilers: [:phoenix, :gettext] ++ Mix.compilers(),
+      compilers: [:phoenix, :gettext] ++ Mix.compilers() ++ [:phoenix_sass],
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps()
@@ -47,7 +47,8 @@ defmodule Poeticoins.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:certifi, "~> 2.8"},
       {:gun, "~> 1.3"},
-      {:cowlib, "~> 2.9.1", override: true}
+      {:cowlib, "~> 2.9.1", override: true},
+      {:phoenix_sass, "~> 0.1.0"}
     ]
   end
 
