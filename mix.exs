@@ -48,7 +48,8 @@ defmodule Poeticoins.MixProject do
       {:certifi, "~> 2.8"},
       {:gun, "~> 1.3"},
       {:cowlib, "~> 2.9.1", override: true},
-      {:phoenix_sass, "~> 0.1.0"}
+      {:phoenix_sass, "~> 0.1.0"},
+      {:tzdata, "~>1.1"}
     ]
   end
 

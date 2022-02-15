@@ -29,9 +29,11 @@ defmodule PoeticoinsWeb.ProductHelpers do
   def fiat_symbols do
     ["eur", "usd"]
   end
-  
-  def human_datetime(datetime) do
-    Calendar.strftime(datetime, "%b %d, %Y   %H:%M:%S")
+
+  def human_datetime(datetime, timezone \\ "UTC") do
+    datetime
+    |> DateTime.shift_zone!(timezone)
+    |> Calendar.strftime("%b %d, %Y   %H:%M:%S")
   end
 
   defp crypto_and_fiat_symbols(%{exchange_name: "coinbase"} = product) do
