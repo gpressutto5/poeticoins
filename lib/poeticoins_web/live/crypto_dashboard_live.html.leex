@@ -23,6 +23,9 @@
   </form>
 </div>
 
-<%= for product <- @products do%>
-  <%= live_component @socket, PoeticoinsWeb.ProductComponent, id: product, timezone: @timezone %>
-<% end %>
+<div class="product-components">
+  <%= for product <- @products do%>
+    <%= live_component @socket, PoeticoinsWeb.ProductComponent,
+                      id: product, timezone: @timezone %>
+  <% end %>
+</div>
