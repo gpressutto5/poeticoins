@@ -5,7 +5,8 @@ defmodule PoeticoinsWeb.ProductLive do
   def mount(%{"id" => product_id} = _params, _session, socket) do
     product = product_from_string(product_id)
     trade = Poeticoins.get_last_trade(product)
-    trades = get_trade_history()
+    init_trades = get_trade_history(product)
+    trades = Enum.take(init_trades, -10)
 
     socket =
       assign(socket,
@@ -13,6 +14,7 @@ defmodule PoeticoinsWeb.ProductLive do
         product_id: product_id,
         trade: trade,
         trades: trades,
+        init_trades: init_trades,
         page_title: page_title_from_trade(trade)
       )
 
@@ -20,7 +22,7 @@ defmodule PoeticoinsWeb.ProductLive do
       Poeticoins.subscribe_to_trades(product)
     end
 
-    {:ok, socket, temporary_assigns: [trades: []]}
+    {:ok, socket, temporary_assigns: [trades: [], init_trades: []]}
   end
 
   def render(%{trade: trade} = assigns) when not is_nil(trade) do
@@ -35,6 +37,7 @@ defmodule PoeticoinsWeb.ProductLive do
               data-trade-timestamp="<%= DateTime.to_unix(@trade.traded_at, :millisecond) %>"
               data-trade-volume="<%= @trade.volume %>"
               data-trade-price="<%= @trade.price %>"
+              data-init-trades="<%= trades_to_chart_data(@init_trades) %>"
         >
         <div id="stockchart-container"></div>
       </div>
@@ -87,7 +90,21 @@ defmodule PoeticoinsWeb.ProductLive do
     DateTime.to_unix(dt, :millisecond)
   end
 
-  defp get_trade_history do
-    []
+  defp get_trade_history(product) do
+    Poeticoins.Historical.get_trades(product)
+  end
+
+  defp to_event(trade) do
+    %{
+      traded_at: DateTime.to_unix(trade.traded_at, :millisecond),
+      price: trade.price,
+      volume: trade.volume
+    }
+  end
+
+  defp trades_to_chart_data(trades) do
+    trades
+    |> Enum.map(&to_event(&1))
+    |> Jason.encode!()
   end
 end

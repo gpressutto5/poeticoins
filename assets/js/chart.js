@@ -10,6 +10,7 @@ let ChartHook = {
 
     this.trades = []
     this.plot = new uPlot(plotOptions(), [[], []], this.el)
+    JSON.parse(this.el.dataset.initTrades).forEach(trade => this.handleNewTrade(trade))
     this.handleEvent(event, (payload) => self.handleNewTrade(payload))
   },
   handleNewTrade(trade) {
@@ -20,8 +21,8 @@ let ChartHook = {
       timestamp: timestamp, price: price
     })
 
-    if (this.trades.length > 100) {
-      this.trades.splice(0, 1)
+    if (this.trades.length > 300) {
+      this.trades.splice(0, this.trades.length - 300)
     }
     this.updateChart()
   },
