@@ -1,4 +1,6 @@
 defmodule PoeticoinsWeb.ProductHelpers do
+  alias PoeticoinsWeb.Router.Helpers, as: Routes
+  alias Poeticoins.Product
   def crypto_name(product) do
     case crypto_and_fiat_symbols(product) do
       %{crypto_symbol: "btc"} -> "Bitcoin"
@@ -17,7 +19,7 @@ defmodule PoeticoinsWeb.ProductHelpers do
   def crypto_icon(conn, product) do
     crypto_symbol = crypto_symbol(product)
     relative_path = Path.join("/images/cryptos", "#{crypto_symbol}.svg")
-    PoeticoinsWeb.Router.Helpers.static_path(conn, relative_path)
+    Routes.static_path(conn, relative_path)
   end
 
   def crypto_symbol(product),
@@ -49,5 +51,10 @@ defmodule PoeticoinsWeb.ProductHelpers do
     crypto_symbol = String.slice(product.currency_pair, 0..2)
     fiat_symbol = String.slice(product.currency_pair, 3..6)
     %{crypto_symbol: crypto_symbol, fiat_symbol: fiat_symbol}
+  end
+
+  def product_from_string(product_id) do
+    [exchange_name, currency_pair] = String.split(product_id, ":")
+    Product.new(exchange_name, currency_pair)
   end
 end

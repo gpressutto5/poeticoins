@@ -77,11 +77,6 @@ defmodule PoeticoinsWeb.CryptoDashboardLive do
     |> Enum.group_by(& &1.exchange_name)
   end
 
-  defp product_from_string(product_id) do
-    [exchange_name, currency_pair] = String.split(product_id, ":")
-    Product.new(exchange_name, currency_pair)
-  end
-
   defp get_timezone_from_connection(socket) do
     case get_connect_params(socket) do
       %{"timezone" => tz} when not is_nil(tz) -> tz
